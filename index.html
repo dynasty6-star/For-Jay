@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Urgent Question</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: #e0f2f1; /* Solid fallback */
+            background: linear-gradient(135deg, #e0f2f1 0%, #b2dfdb 100%);
+            font-family: sans-serif;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 40px 20px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            z-index: 10;
+        }
+
+        h1 { color: #00695c; font-size: 1.5rem; margin-bottom: 30px; }
+
+        .btn-wrapper {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            height: 60px;
+            position: relative;
+        }
+
+        .btn {
+            padding: 15px 35px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        #yesBtn { background: #00897b; color: white; }
+        
+        #noBtn { 
+            background: white; 
+            color: #00695c; 
+            position: relative; /* Starts next to Yes */
+            transition: 0.1s ease;
+            z-index: 100;
+        }
+
+        .tooth {
+            position: fixed;
+            top: -50px;
+            font-size: 2rem;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(110vh) rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="music">
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="container" id="mainBox">
+        <h1 id="header">Is your name 48 teeth Teethklonjay?</h1>
+        <div class="btn-wrapper">
+            <button class="btn" id="yesBtn" onclick="celebrate()">Yes</button>
+            <button class="btn" id="noBtn" onmouseover="moveMe()" ontouchstart="moveMe()">No</button>
+        </div>
+    </div>
+
+    <script>
+        function moveMe() {
+            const noBtn = document.getElementById('noBtn');
+            noBtn.style.position = 'fixed';
+            
+            // Calculate random position but keep it away from the very edges
+            const padding = 60;
+            const w = window.innerWidth - noBtn.offsetWidth - padding;
+            const h = window.innerHeight - noBtn.offsetHeight - padding;
+
+            const newX = Math.floor(Math.random() * w) + (padding / 2);
+            const newY = Math.floor(Math.random() * h) + (padding / 2);
+
+            noBtn.style.left = newX + 'px';
+            noBtn.style.top = newY + 'px';
+        }
+
+        function celebrate() {
+            document.getElementById('header').innerHTML = "I KNEW IT! 😂🦷<br><span style='font-size: 1rem; font-weight: normal;'>You're stuck with me!</span>";
+            document.getElementById('noBtn').style.display = 'none';
+            document.getElementById('yesBtn').style.display = 'none';
+            
+            // Play Music
+            const audio = document.getElementById('music');
+            audio.play();
+
+            // Teeth Rain
+            setInterval(() => {
+                const tooth = document.createElement('div');
+                tooth.className = 'tooth';
+                tooth.innerText = '🦷';
+                tooth.style.left = Math.random() * 100 + 'vw';
+                tooth.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                document.body.appendChild(tooth);
+                setTimeout(() => tooth.remove(), 4000);
+            }, 300);
+        }
+    </script>
+</body>
+</html>
