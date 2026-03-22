@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Urgent Question</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #e0f2f1 0%, #b2dfdb 100%); /* Fresh Teal Gradient */
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(12px);
+            padding: 50px 30px;
+            border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            z-index: 10;
+            width: 90%;
+            max-width: 450px;
+        }
+
+        h1 {
+            color: #00695c;
+            font-size: 1.8rem;
+            margin-bottom: 35px;
+            line-height: 1.4;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+            min-height: 60px;
+            position: relative;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: transform 0.1s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        #yesBtn {
+            background: #00897b;
+            color: white;
+        }
+
+        #noBtn {
+            background: #ffffff;
+            color: #00695c;
+            position: relative;
+            z-index: 15;
+        }
+
+        /* Success Animation */
+        .success-content {
+            display: none;
+            font-size: 1.5rem;
+            color: #004d40;
+            font-weight: bold;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .floating-emoji {
+            position: fixed;
+            top: -10vh;
+            font-size: 2.5rem;
+            pointer-events: none;
+            z-index: 1;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(110vh) rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="mySong">
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="glass-card">
+        <div id="quiz-ui">
+            <h1 id="question">Is your name 48 teeth Teethklonjay?</h1>
+            
+            <div class="button-group" id="buttonContainer">
+                <button class="btn" id="yesBtn" onclick="handleYes()">Yes</button>
+                <button class="btn" id="noBtn" onmouseenter="moveNo()" ontouchstart="moveNo()">No</button>
+            </div>
+        </div>
+
+        <div id="success-ui" class="success-content">
+            <p>I KNEW IT! 😂🦷</p>
+            <p style="font-size: 1rem; margin-top: 10px; font-weight: normal;">You’re stuck with me!</p>
+        </div>
+    </div>
+
+    <script>
+        function moveNo() {
+            const btn = document.getElementById('noBtn');
+            btn.style.position = 'fixed';
+            
+            const padding = 40;
+            const maxX = window.innerWidth - btn.offsetWidth - padding;
+            const maxY = window.innerHeight - btn.offsetHeight - padding;
+
+            const randomX = Math.max(padding, Math.floor(Math.random() * maxX));
+            const randomY = Math.max(padding, Math.floor(Math.random() * maxY));
+
+            btn.style.left = randomX + 'px';
+            btn.style.top = randomY + 'px';
+        }
+
+        function handleYes() {
+            document.getElementById('quiz-ui').style.display = 'none';
+            document.getElementById('success-ui').style.display = 'block';
+            document.body.style.background = "#b2dfdb";
+            
+            const song = document.getElementById('mySong');
+            song.play().catch(e => console.log("Audio play blocked"));
+
+            setInterval(spawnEmoji, 300);
+        }
+
+        function spawnEmoji() {
+            const emojis = ['🦷', '😁', '✨', '🔥'];
+            const emoji = document.createElement('div');
+            emoji.classList.add('floating-emoji');
+            emoji.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+            emoji.style.left = Math.random() * 100 + "vw";
+            emoji.style.animationDuration = Math.random() * 2 + 3 + "s";
+            document.body.appendChild(emoji);
+            setTimeout(() => { emoji.remove(); }, 5000);
+        }
+    </script>
+</body>
+</html>
